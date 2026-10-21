@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Portal • Quản Lý Tài Khoản 20/10 UAC — /dungduavoitao 👑</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👑</text></svg>">
+  
+  <!-- Fonts: Be Vietnam Pro & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url('/assets/fonts/PlusJakartaSans-Variable.ttf') format('truetype');
+    }
+
+    :root {
+      --bg-body: #0F1115;
+      --bg-surface: #181B20;
+      --bg-card: #20242B;
+      --bg-card-hover: #262B34;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --border-focus: #E07A8B;
+      
+      --pink-primary: #E07A8B;
+      --pink-hover: #D06577;
+      --pink-light: #FCEBED;
+      --rose-deep: #C85A70;
+      --green-sprout: #88D49E;
+      --gold: #F5B041;
+      --blue-accent: #5DADE2;
+      
+      --text-main: #F4F6F8;
+      --text-muted: #9BA3AF;
+      --text-dark: #4A3E3D;
+      
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-full: 9999px;
+      
+      --shadow-card: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.1);
+      --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Be Vietnam Pro', 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    /* Top Navigation Bar */
+    .admin-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 17, 21, 0.88);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 16px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .brand-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #E07A8B, #C85A70);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 4px 14px rgba(224, 122, 139, 0.35);
+    }
+
+    .brand-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: #FFFFFF;
+    }
+
+    .brand-route {
+      font-size: 0.8rem;
+      color: var(--pink-primary);
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: var(--radius-full);
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink-primary), var(--rose-deep));
+      color: #FFFFFF;
+      box-shadow: 0 4px 15px rgba(224, 122, 139, 0.3);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(224, 122, 139, 0.45);
+    }
+
+    .btn-secondary {
+      background: var(--bg-surface);
+      color: var(--text-main);
+      border-color: var(--border-color);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-card);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-success {
+      background: rgba(136, 212, 158, 0.15);
+      color: var(--green-sprout);
+      border-color: rgba(136, 212, 158, 0.35);
+    }
+    .btn-success:hover {
+      background: rgba(136, 212, 158, 0.25);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 30px 24px;
+    }
+
+    /* Stat Cards Banner */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      transition: var(--transition);
+    }
+    .stat-card:hover {
+      border-color: rgba(224, 122, 139, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    /* Filter & Search Bar */
+    .toolbar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 18px 22px;
+      margin-bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .toolbar-row {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 260px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 12px 18px 12px 42px;
+      border-radius: var(--radius-full);
+      color: #FFFFFF;
+      font-size: 0.95rem;
+      outline: none;
+      transition: var(--transition);
+    }
+    .search-box input:focus {
+      border-color: var(--pink-primary);
+      box-shadow: 0 0 0 3px rgba(224, 122, 139, 0.18);
+    }
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-muted);
+    }
+
+    .filter-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .filter-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 7px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+    .filter-pill:hover, .filter-pill.active {
+      background: rgba(224, 122, 139, 0.2);
+      border-color: var(--pink-primary);
+      color: #FFFFFF;
+    }
+
+    /* Members Grid */
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 20px;
+    }
+
+    .member-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      transition: var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .member-card:hover {
+      border-color: rgba(224, 122, 139, 0.35);
+      background: var(--bg-card);
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .card-top {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .member-avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--pink-primary);
+      background: #252830;
+      flex-shrink: 0;
+    }
+
+    .card-meta {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .member-name {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #FFFFFF;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .member-dept-tag {
+      display: inline-block;
+      font-size: 0.76rem;
+      font-weight: 700;
+      background: rgba(224, 122, 139, 0.15);
+      color: var(--pink-primary);
+      padding: 3px 10px;
+      border-radius: var(--radius-full);
+      margin-top: 4px;
+      max-width: 100%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .member-badge-tag {
+      font-size: 0.8rem;
+      color: var(--gold);
+      font-weight: 600;
+      margin-top: 3px;
+    }
+
+    /* Account Credential Box */
+    .cred-box {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: var(--radius-md);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cred-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.86rem;
+    }
+
+    .cred-label {
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .cred-val {
+      font-family: monospace;
+      font-weight: 700;
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 3px 8px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .cred-val:hover {
+      background: rgba(224, 122, 139, 0.25);
+      color: var(--pink-primary);
+    }
+
+    /* Wish Box */
+    .wish-box {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #D1D5DB;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-md);
+      padding: 12px;
+      max-height: 85px;
+      overflow-y: auto;
+    }
+
+    /* Card Actions */
+    .card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .btn-action {
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.8rem;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-main);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+    .btn-action:hover {
+      border-color: rgba(255, 255, 255, 0.25);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .btn-action-preview {
+      background: rgba(224, 122, 139, 0.15);
+      color: var(--pink-primary);
+      border-color: rgba(224, 122, 139, 0.3);
+    }
+    .btn-action-preview:hover {
+      background: rgba(224, 122, 139, 0.25);
+    }
+
+    .btn-action-drive {
+      background: rgba(93, 173, 226, 0.12);
+      color: var(--blue-accent);
+      border-color: rgba(93, 173, 226, 0.25);
+    }
+    .btn-action-drive:hover {
+      background: rgba(93, 173, 226, 0.25);
+    }
+
+    /* Modal Styling */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      max-width: 650px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #FFFFFF;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+    .modal-close:hover { color: #FFFFFF; }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      color: #FFFFFF;
+      font-size: 0.92rem;
+      outline: none;
+    }
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--pink-primary);
+    }
+    .form-textarea {
+      min-height: 90px;
+      resize: vertical;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: #10B981;
+      color: #FFFFFF;
+      padding: 14px 22px;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: 0.92rem;
+      box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      z-index: 2000;
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .toast.active {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 768px) {
+      .admin-nav { padding: 16px; }
+      .members-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Admin Navbar -->
+  <header class="admin-nav">
+    <div class="brand-group">
+      <div class="brand-badge">👑</div>
+      <div>
+        <div class="brand-title">CỔNG QUẢN TRỊ VIÊN UAC 20/10</div>
+        <div class="brand-route">URL: /dungduavoitao • CLB Nghệ thuật UAC - UEd</div>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <a href="/index.html" class="btn btn-secondary" target="_blank">
+        <span>🌸</span> Xem Trang Chủ
+      </a>
+      <button class="btn btn-secondary" onclick="resetToOriginalData()" title="Lấy lại danh sách và ảnh chân dung mới nhất từ hệ thống">
+        <span>🔄</span> Đồng Bộ Ảnh & Data
+      </button>
+      <button class="btn btn-secondary" id="btnExportAllMsgs">
+        <span>📋</span> Copy Toàn Bộ Tài Khoản
+      </button>
+      <button class="btn btn-secondary" id="btnExportCSV">
+        <span>📥</span> Xuất File CSV
+      </button>
+      <button class="btn btn-primary" id="btnAddNew">
+        <span>➕</span> Thêm Nàng Thơ Mới
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="container">
+
+    <!-- Stat Metrics -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Tổng Nàng Thơ</span>
+        <span class="stat-value" id="statTotal">36</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Ban Múa</span>
+        <span class="stat-value" id="statMua">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Ban Nhảy</span>
+        <span class="stat-value" id="statNhay">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Ban Thanh Nhạc</span>
+        <span class="stat-value" id="statNhac">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Ban Hậu Cần</span>
+        <span class="stat-value" id="statHauCan">0</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Đa Ban / Khác</span>
+        <span class="stat-value" id="statDaBan">0</span>
+      </div>
+    </div>
+
+    <!-- Toolbar: Search & Filter -->
+    <div class="toolbar">
+      <div class="toolbar-row">
+        <div class="search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Tìm theo tên, username, mật khẩu, ban chuyên môn...">
+        </div>
+      </div>
+      <div class="filter-pills" id="filterPills">
+        <button class="filter-pill active" data-filter="all">Tất cả (<span id="pillCountAll">36</span>)</button>
+        <button class="filter-pill" data-filter="múa">Ban Múa</button>
+        <button class="filter-pill" data-filter="nhảy">Ban Nhảy</button>
+        <button class="filter-pill" data-filter="thanh nhạc">Ban Thanh Nhạc</button>
+        <button class="filter-pill" data-filter="hậu cần">Ban Hậu Cần</button>
+        <button class="filter-pill" data-filter="đa ban">Đa Ban / Media</button>
+      </div>
+    </div>
+
+    <!-- Member Cards Grid -->
+    <div class="members-grid" id="membersGrid">
+      <!-- Generated via JS -->
+    </div>
+
+  </main>
+
+  <!-- Edit / Add Modal -->
+  <div class="modal-backdrop" id="editModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalTitle">Chỉnh Sửa Nàng Thơ</h3>
+        <button class="modal-close" id="modalCloseBtn">&times;</button>
+      </div>
+      <form id="memberForm">
+        <input type="hidden" id="editId">
+        
+        <div class="form-group">
+          <label class="form-label">Họ và tên</label>
+          <input type="text" class="form-input" id="editFullName" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Ban chuyên môn</label>
+          <input type="text" class="form-input" id="editDept" required placeholder="Ví dụ: Ban múa, Ban nhảy...">
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <div class="form-group">
+            <label class="form-label">Tài khoản (Username)</label>
+            <input type="text" class="form-input" id="editUsername" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Mật mã (Passcode)</label>
+            <input type="text" class="form-input" id="editPassword" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Danh hiệu / Badge</label>
+          <input type="text" class="form-input" id="editBadge" required placeholder="Ví dụ: 🌸 Nàng Thơ Thanh Thoát">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Link ảnh đại diện (Ảnh hiển thị trên thiệp)</label>
+          <input type="url" class="form-input" id="editPhoto" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Link ảnh Google Drive gốc (Form)</label>
+          <input type="url" class="form-input" id="editDriveUrl">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Câu danh ngôn (Quote)</label>
+          <input type="text" class="form-input" id="editQuote">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Tâm thư tri ân 20/10 riêng</label>
+          <textarea class="form-textarea" id="editWish" required></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="modalCancelBtn">Hủy</button>
+          <button type="submit" class="btn btn-primary">Lưu Thay Đổi ✦</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div class="toast" id="toast">
+    <span>✅</span> <span id="toastMsg">Đã sao chép thành công!</span>
+  </div>
+
+  <!-- Data Script -->
+  <script src="/assets/js/data.js"></script>
+
+  <!-- Admin Script -->
+  <script>
+    // Load members from localStorage or data.js
+    function getStoredMembers() {
+      let list = window.UAC_MEMBERS || [];
+      try {
+        const stored = localStorage.getItem('UAC_CUSTOM_MEMBERS');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            // Auto sync fresh local photos from window.UAC_MEMBERS
+            if (window.UAC_MEMBERS && window.UAC_MEMBERS.length > 0) {
+              parsed.forEach(p => {
+                const fresh = window.UAC_MEMBERS.find(m => m.id === p.id || m.username === p.username);
+                if (fresh && fresh.photo) {
+                  if (!p.photo || p.photo.includes('unsplash.com')) {
+                    p.photo = fresh.photo;
+                  }
+                }
+              });
+            }
+            return parsed;
+          }
+        }
+      } catch (e) {}
+      return list;
+    }
+
+    function saveStoredMembers(list) {
+      localStorage.setItem('UAC_CUSTOM_MEMBERS', JSON.stringify(list));
+      window.UAC_MEMBERS = list;
+    }
+
+    let members = getStoredMembers();
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    // DOM Elements
+    const membersGrid = document.getElementById('membersGrid');
+    const searchInput = document.getElementById('searchInput');
+    const filterPills = document.getElementById('filterPills');
+    const toast = document.getElementById('toast');
+    const toastMsg = document.getElementById('toastMsg');
+    
+    const editModal = document.getElementById('editModal');
+    const memberForm = document.getElementById('memberForm');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalCloseBtn = document.getElementById('modalCloseBtn');
+    const modalCancelBtn = document.getElementById('modalCancelBtn');
+
+    const btnAddNew = document.getElementById('btnAddNew');
+    const btnExportAllMsgs = document.getElementById('btnExportAllMsgs');
+    const btnExportCSV = document.getElementById('btnExportCSV');
+
+    // Stats Elements
+    const statTotal = document.getElementById('statTotal');
+    const statMua = document.getElementById('statMua');
+    const statNhay = document.getElementById('statNhay');
+    const statNhac = document.getElementById('statNhac');
+    const statHauCan = document.getElementById('statHauCan');
+    const statDaBan = document.getElementById('statDaBan');
+    const pillCountAll = document.getElementById('pillCountAll');
+
+    function showToast(msg) {
+      toastMsg.textContent = msg;
+      toast.classList.add('active');
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 2500);
+    }
+
+    function updateStats() {
+      statTotal.textContent = members.length;
+      pillCountAll.textContent = members.length;
+
+      let mua = 0, nhay = 0, nhac = 0, haucan = 0, daban = 0;
+      members.forEach(m => {
+        const d = (m.department || '').toLowerCase();
+        if (d.includes(',') || d.split('ban').length > 2) {
+          daban++;
+        } else if (d.includes('múa')) {
+          mua++;
+        } else if (d.includes('nhảy')) {
+          nhay++;
+        } else if (d.includes('thanh nhạc') || d.includes('nhạc')) {
+          nhac++;
+        } else if (d.includes('hậu cần')) {
+          haucan++;
+        } else {
+          daban++;
+        }
+      });
+
+      statMua.textContent = mua;
+      statNhay.textContent = nhay;
+      statNhac.textContent = nhac;
+      statHauCan.textContent = haucan;
+      statDaBan.textContent = daban;
+    }
+
+    function renderGrid() {
+      updateStats();
+
+      const filtered = members.filter(m => {
+        // Department filter
+        const d = (m.department || '').toLowerCase();
+        let matchDept = true;
+        if (currentFilter === 'múa') matchDept = d.includes('múa');
+        else if (currentFilter === 'nhảy') matchDept = d.includes('nhảy');
+        else if (currentFilter === 'thanh nhạc') matchDept = d.includes('thanh nhạc') || d.includes('nhạc');
+        else if (currentFilter === 'hậu cần') matchDept = d.includes('hậu cần');
+        else if (currentFilter === 'đa ban') matchDept = d.includes(',') || d.includes('truyền thông') || d.split('ban').length > 2;
+
+        // Search query
+        let matchSearch = true;
+        if (searchQuery) {
+          const q = searchQuery.toLowerCase();
+          matchSearch = (m.fullName || '').toLowerCase().includes(q) ||
+                        (m.username || '').toLowerCase().includes(q) ||
+                        (m.department || '').toLowerCase().includes(q) ||
+                        (m.password || '').toLowerCase().includes(q);
+        }
+
+        return matchDept && matchSearch;
+      });
+
+      if (filtered.length === 0) {
+        membersGrid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 60px; color: var(--text-muted);">
+            <h3>Không tìm thấy thành viên nào phù hợp</h3>
+            <p>Vui lòng thử tìm kiếm với từ khóa khác.</p>
+          </div>
+        `;
+        return;
+      }
+
+      membersGrid.innerHTML = filtered.map(m => {
+        let photoSrc = m.photo || '';
+        if (photoSrc && !photoSrc.startsWith('http')) {
+          photoSrc = photoSrc.startsWith('/') ? photoSrc : '/' + photoSrc;
+        }
+        return `
+          <div class="member-card" data-id="${m.id}">
+            <div class="card-top">
+              <img src="${photoSrc}" class="member-avatar" alt="${m.fullName}" onerror="this.src='https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'">
+              <div class="card-meta">
+                <div class="member-name" title="${m.fullName}">${m.fullName}</div>
+                <div class="member-dept-tag">${m.department}</div>
+                <div class="member-badge-tag">${m.badge || ''}</div>
+              </div>
+            </div>
+
+            <!-- Credentials Box -->
+            <div class="cred-box">
+              <div class="cred-row">
+                <span class="cred-label">Nickname:</span>
+                <span class="cred-val" onclick="copyText('${m.username}', 'Đã copy nickname: ${m.username}')" title="Bấm để copy">
+                  ${m.username} 📋
+                </span>
+              </div>
+              <div class="cred-row">
+                <span class="cred-label">Pass:</span>
+                <span class="cred-val" onclick="copyText('${m.password}', 'Đã copy pass: ${m.password}')" title="Bấm để copy">
+                  ${m.password} 📋
+                </span>
+              </div>
+            </div>
+
+            <!-- Wish Snippet -->
+            <div class="wish-box" title="${m.personalWish || ''}">
+              ${m.personalWish || 'Chưa có lời chúc riêng.'}
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="card-actions">
+              <a href="/index.html?user=${m.username}&pass=${m.password}" target="_blank" class="btn-action btn-action-preview" title="Xem thiệp cá nhân hóa của thành viên này">
+                <span>👁️</span> Xem Thiệp
+              </a>
+              <button class="btn-action" onclick="copyInviteMessage('${m.id}')" title="Copy tin nhắn mời kèm tài khoản để gửi">
+                <span>💌</span> Gửi Thư Mời
+              </button>
+              ${m.driveUrl ? `
+                <a href="${m.driveUrl}" target="_blank" class="btn-action btn-action-drive" title="Mở ảnh Google Drive gốc">
+                  <span>🔗</span> Ảnh Drive
+                </a>
+              ` : `<span></span>`}
+              <button class="btn-action" onclick="openEditModal('${m.id}')" title="Chỉnh sửa thông tin">
+                <span>✏️</span> Sửa
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Copy to clipboard helper
+    window.copyText = function(text, successMsg) {
+      navigator.clipboard.writeText(text).then(() => {
+        showToast(successMsg || 'Đã sao chép vào bộ nhớ tạm!');
+      }).catch(() => {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showToast(successMsg || 'Đã sao chép vào bộ nhớ tạm!');
+      });
+    };
+
+    // Copy personalized invitation message
+    window.copyInviteMessage = function(id) {
+      const m = members.find(x => String(x.id) === String(id));
+      if (!m) return;
+      const origin = window.location.origin;
+      const msg = `🎁 Thân gửi ${m.fullName}!
+Món quà 20/10 bí mật từ các chàng trai CLB Nghệ thuật UAC - UEd dành riêng tặng bạn đã sẵn sàng tại:
+👉 ${origin}/index.html
+
+👤 Nickname: ${m.username}
+🔑 Pass: ${m.password}
+
+Chúc bạn một ngày 20/10 thật rực rỡ, ngọt ngào và hạnh phúc ngập tràn! 🌸✨`;
+      copyText(msg, `Đã copy tin nhắn gửi cho ${m.fullName}!`);
+    };
+
+    // Reset and sync with system data
+    window.resetToOriginalData = function() {
+      if (confirm('Bạn có muốn đồng bộ lại danh sách và ảnh chân dung mới nhất từ hệ thống không?')) {
+        localStorage.removeItem('UAC_CUSTOM_MEMBERS');
+        members = [...(window.UAC_MEMBERS || [])];
+        renderGrid();
+        showToast('Đã đồng bộ toàn bộ ảnh chân dung và tài khoản mới nhất!');
+      }
+    };
+
+    // Copy ALL 36 accounts formatted
+    btnExportAllMsgs.addEventListener('click', () => {
+      const origin = window.location.origin;
+      let allText = `🌸 DANH SÁCH TÀI KHOẢN 20/10 CLB NGHỆ THUẬT UAC - UEd 🌸\nTổng số: ${members.length} thành viên\nLink: ${origin}/index.html\n\n`;
+      members.forEach((m, i) => {
+        allText += `${i + 1}. ${m.fullName} (${m.department})\n`;
+        allText += `   👤 Nickname: ${m.username} | 🔑 Pass: ${m.password}\n\n`;
+      });
+      copyText(allText, `Đã sao chép toàn bộ ${members.length} tài khoản thành viên!`);
+    });
+
+    // Export CSV
+    btnExportCSV.addEventListener('click', () => {
+      let csv = 'ID,Ho_Va_Ten,Ban,Tai_Khoan,Mat_Khau,Danh_Hieu,Link_Drive,Link_Photo\n';
+      members.forEach(m => {
+        const row = [
+          m.id,
+          `"${(m.fullName || '').replace(/"/g, '""')}"`,
+          `"${(m.department || '').replace(/"/g, '""')}"`,
+          m.username,
+          m.password,
+          `"${(m.badge || '').replace(/"/g, '""')}"`,
+          `"${m.driveUrl || ''}"`,
+          `"${m.photo || ''}"`
+        ];
+        csv += row.join(',') + '\n';
+      });
+
+      const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Danh_Sach_Tai_Khoan_UAC_2010.csv`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Đã xuất file CSV thành công!');
+    });
+
+    // Filter Pills
+    filterPills.addEventListener('click', (e) => {
+      const pill = e.target.closest('.filter-pill');
+      if (!pill) return;
+      document.querySelectorAll('.filter-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      currentFilter = pill.getAttribute('data-filter');
+      renderGrid();
+    });
+
+    // Search Input
+    searchInput.addEventListener('input', (e) => {
+      searchQuery = e.target.value.trim();
+      renderGrid();
+    });
+
+    // Modal Handlers
+    window.openEditModal = function(id) {
+      const m = members.find(x => String(x.id) === String(id));
+      if (!m) return;
+      document.getElementById('editId').value = m.id;
+      document.getElementById('editFullName').value = m.fullName || '';
+      document.getElementById('editDept').value = m.department || '';
+      document.getElementById('editUsername').value = m.username || '';
+      document.getElementById('editPassword').value = m.password || '';
+      document.getElementById('editBadge').value = m.badge || '';
+      document.getElementById('editPhoto').value = m.photo || '';
+      document.getElementById('editDriveUrl').value = m.driveUrl || '';
+      document.getElementById('editQuote').value = m.quotes || '';
+      document.getElementById('editWish').value = m.personalWish || '';
+      
+      modalTitle.textContent = `Chỉnh Sửa: ${m.fullName}`;
+      editModal.classList.add('active');
+    };
+
+    btnAddNew.addEventListener('click', () => {
+      document.getElementById('editId').value = '';
+      memberForm.reset();
+      document.getElementById('editPassword').value = '2010*uac';
+      document.getElementById('editBadge').value = '🌸 Nàng Thơ UAC';
+      document.getElementById('editPhoto').value = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80';
+      document.getElementById('editWish').value = 'Chúc bạn ngày 20/10 ngập tràn niềm vui, luôn rạng rỡ xinh đẹp và tự tin tỏa sáng dưới mái nhà CLB Nghệ thuật UAC - UEd nhé! 💖✨';
+      
+      modalTitle.textContent = 'Thêm Nàng Thơ Mới ✦';
+      editModal.classList.add('active');
+    });
+
+    modalCloseBtn.addEventListener('click', () => editModal.classList.remove('active'));
+    modalCancelBtn.addEventListener('click', () => editModal.classList.remove('active'));
+
+    memberForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const id = document.getElementById('editId').value;
+      const fullName = document.getElementById('editFullName').value.trim();
+      const department = document.getElementById('editDept').value.trim();
+      const username = document.getElementById('editUsername').value.trim().toLowerCase();
+      const password = document.getElementById('editPassword').value.trim();
+      const badge = document.getElementById('editBadge').value.trim();
+      const photo = document.getElementById('editPhoto').value.trim();
+      const driveUrl = document.getElementById('editDriveUrl').value.trim();
+      const quotes = document.getElementById('editQuote').value.trim();
+      const personalWish = document.getElementById('editWish').value.trim();
+
+      if (id) {
+        // Edit existing
+        const idx = members.findIndex(x => String(x.id) === String(id));
+        if (idx !== -1) {
+          members[idx] = {
+            ...members[idx],
+            fullName,
+            department,
+            username,
+            password,
+            badge,
+            photo,
+            driveUrl,
+            quotes,
+            personalWish
+          };
+          showToast(`Đã cập nhật thông tin của ${fullName}!`);
+        }
+      } else {
+        // Add new
+        const newId = members.length > 0 ? Math.max(...members.map(x => x.id || 0)) + 1 : 1;
+        members.push({
+          id: newId,
+          fullName,
+          department,
+          username,
+          password,
+          badge,
+          photo,
+          driveUrl,
+          quotes,
+          personalWish
+        });
+        showToast(`Đã thêm thành viên mới: ${fullName}!`);
+      }
+
+      saveStoredMembers(members);
+      editModal.classList.remove('active');
+      renderGrid();
+    });
+
+    // Initial render
+    renderGrid();
+  </script>
+</body>
+</html>

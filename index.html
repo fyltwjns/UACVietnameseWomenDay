@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UAC • Chúc Mừng 20/10 — Nơi Nàng Thơ Tỏa Sắc 🌸</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌸</text></svg>">
+  
+  <!-- Preload Local Full Font (Hỗ trợ 100% tiếng Việt có dấu, không phụ thuộc Google CDN) -->
+  <link rel="preload" href="assets/fonts/PlusJakartaSans-Variable.ttf" as="font" type="font/ttf" crossorigin>
+  <style>
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      font-style: normal;
+      font-weight: 100 900;
+      font-display: swap;
+      src: url('assets/fonts/PlusJakartaSans-Variable.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      font-style: normal;
+      font-weight: 800;
+      font-display: swap;
+      src: url('assets/fonts/PlusJakartaSans-Variable.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      font-style: normal;
+      font-weight: 700;
+      font-display: swap;
+      src: url('assets/fonts/PlusJakartaSans-Variable.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      font-style: normal;
+      font-weight: 600;
+      font-display: swap;
+      src: url('assets/fonts/PlusJakartaSans-Variable.ttf') format('truetype');
+    }
+    @font-face {
+      font-family: 'Plus Jakarta Sans';
+      font-style: normal;
+      font-weight: 400;
+      font-display: swap;
+      src: url('assets/fonts/PlusJakartaSans-Variable.ttf') format('truetype');
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body, button, input, select, textarea, optgroup, span, p, a, h1, h2, h3, h4, div {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    button, input, select, textarea {
+      font-family: inherit !important;
+    }
+
+    .btn-open-surprise, .btn-open-surprise span {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+      font-weight: 800 !important;
+    }
+  </style>
+
+  <!-- Canvas Confetti CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  
+  <!-- CSS Styles with cache buster -->
+  <link rel="stylesheet" href="assets/css/styles.css?v=20108">
+</head>
+<body>
+
+  <!-- ========================================================
+       SECTION 1: HERO FULL-SIZE VIDEO ONLY (KHÔNG BỊ CHỮ CHE)
+       ======================================================== -->
+  <section class="hero-video-section" id="heroVideoSection">
+    <div class="hero-video-container">
+      <video class="hero-video" id="heroVideo" autoplay muted playsinline preload="auto">
+        <source src="assets/video/video_hero.mp4" type="video/mp4">
+        Trình duyệt của bạn không hỗ trợ video.
+      </video>
+    </div>
+
+    <!-- Scroll Down Indicator (Bé ê a xu hướng dẫn các chị vuốt xuống) -->
+    <div class="scroll-down-hint" id="scrollDownHint" title="Bấm để cuộn xuống">
+      <span class="scroll-arrow">👇</span>
+      <span>Vuốt xuống nhận quà nè ✦</span>
+    </div>
+  </section>
+
+
+  <!-- ========================================================
+       SECTION 2: VIDEO HÁT TẶNG CHỊ EM (MÓN QUÀ ÂM NHẠC TỪ CÁC CHÀNG TRAI UAC)
+       ======================================================== -->
+  <section class="singing-section" id="singingSection">
+    <div class="singing-container">
+      
+      <!-- NÚT BẤM NHẬN QUÀ NÈ (TRƯỚC VIDEO HÁT) -->
+      <div class="gift-cta-wrap" id="giftSection">
+        <button class="btn-open-surprise" id="btnOpenSurprise">
+          <span class="icon-box">🎁</span>
+          <span>Nhận Quà Nè Các Nàng ✦</span>
+        </button>
+      </div>
+
+      <!-- PHẦN 2: VIDEO HÁT TẶNG CHỊ EM (SAU PHẦN QUÀ) -->
+      <div class="singing-video-block" id="singingVideoBlock">
+        <!-- Section Header -->
+        <div class="singing-header">
+          <div class="singing-badge">
+            <span>🎤 MÓN QUÀ TỪ CÁC CHÀNG TRAI UAC • 20/10 ✦</span>
+          </div>
+          <h2 class="singing-title">
+            Khúc Ca Dành Tặng Nàng Thơ
+          </h2>
+        </div>
+
+        <!-- Video Player Liquid Glass Frame -->
+        <div class="singing-player-card">
+          <div class="singing-video-wrap">
+            <video class="singing-video" id="singingVideo" controls playsinline preload="metadata" poster="assets/video/video_hat_tang_poster.jpg">
+              <source src="assets/video/video_hat_tang.mp4" type="video/mp4">
+              Trình duyệt của bạn không hỗ trợ phát video này.
+            </video>
+            
+            <!-- Liquid Glass Overlay Play Button -->
+            <div class="singing-play-overlay" id="singingPlayOverlay">
+              <button class="btn-play-singing" id="btnPlaySinging" type="button" aria-label="Bật video hát tặng">
+                <span class="play-icon">▶</span>
+              </button>
+              <div class="play-prompt-text">
+                <span class="play-main-txt">Bấm để thưởng thức khúc ca nè ✦</span>
+                <span class="play-sub-txt">Giai điệu từ các chàng trai UAC gửi đến bạn 🎵</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mascot Cheer Note -->
+          <div class="singing-mascot-cheer">
+            <div class="cheer-mascot-img-wrap">
+              <img class="pixel-sprite" src="assets/mascot/be_mam_heart.png" alt="Bé ê a xu Cổ Vũ">
+            </div>
+            <div class="cheer-speech">
+              <p><strong>Bé ê a xu thủ thỉ:</strong> "Chị ơi, các anh chuẩn bị bài hát này bằng tất cả tình cảm đó ạ! Chúc các chị có một ngày 20/10 thật rực rỡ và ngập tràn niềm vui! 🌸💖"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ========================================================
+       SECTION 3: SECRET GATEWAY MODAL (CỔNG BẢO MẬT)
+       ======================================================== -->
+  <div class="modal-overlay" id="gatewayModal">
+    <div class="gateway-card">
+      <button class="modal-close-btn" id="btnCloseModal" title="Đóng">&times;</button>
+      
+      <!-- Mascot Pixel Sticker on top of modal -->
+      <div class="gateway-sticker-wrap">
+        <img class="pixel-sprite" id="gatewayMascotImg" src="assets/mascot/be_mam_key.png" alt="Bé ê a xu Giữ Chìa Khóa">
+      </div>
+
+      <h2 class="gateway-title">Cổng Mở Điều Kỳ Diệu ✨</h2>
+      <p class="gateway-desc">
+        Vui lòng nhập nickname và pass do các chàng trai UAC gửi tặng riêng bạn để mở hộp quà!
+      </p>
+
+      <form class="auth-form" id="authForm">
+        <div class="input-group">
+          <label for="authUsername">Nickname</label>
+          <div class="input-field-wrap">
+            <span class="field-icon">👤</span>
+            <input type="text" id="authUsername" placeholder="Nhập nickname của bạn..." required autocomplete="off">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="authPassword">Pass</label>
+          <div class="input-field-wrap">
+            <span class="field-icon">🔑</span>
+            <input type="password" id="authPassword" placeholder="Nhập pass..." required autocomplete="off">
+          </div>
+        </div>
+
+        <div class="auth-error-msg" id="authError">
+          <span>⚠️</span> Nickname hoặc pass chưa chính xác rồi chị ơi!
+        </div>
+
+        <button type="submit" class="btn-submit-auth">
+          <span>✨ Mở Hộp Quà Bí Mật ✦</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       SECTION 4: PERSONALIZED SANCTUARY (THIỆP CÁ NHÂN HÓA)
+       ======================================================== -->
+  <section class="sanctuary-section" id="sanctuarySection">
+    <!-- Sanctuary Navbar -->
+    <div class="sanctuary-nav">
+      <div class="uac-badge">
+        <span class="badge-icon">🌸</span>
+        <span>UAC • Kỷ Niệm 20/10 Độc Bản</span>
+      </div>
+      <button class="btn-logout" id="btnLogout">
+        <span>🚪</span> Đổi Tài Khoản Khác
+      </button>
+    </div>
+
+    <!-- Main Card Container -->
+    <div class="sanctuary-card-container">
+      <div class="personalized-gift-card" id="personalizedGiftCard">
+        
+        <!-- Left Column: Portrait & Pixel Mascot Sticker -->
+        <div class="card-portrait-col">
+          <!-- Corner Mascot Sticker: Bé ê a xu Ôm Hoa Hồng -->
+          <div class="card-sticker-corner">
+            <img class="pixel-sprite" id="cardMascotImg" src="assets/mascot/be_mam_rose.png" alt="Bé ê a xu Tặng Hoa">
+          </div>
+
+          <!-- Portrait Frame -->
+          <div class="portrait-frame">
+            <img class="user-photo" id="userPhoto" src="" alt="Chân dung nàng thơ UAC">
+            <div class="portrait-tag" id="userTag">UAC ARTIST</div>
+          </div>
+        </div>
+
+        <!-- Right Column: Heartfelt Wish & Details -->
+        <div class="card-content-col">
+          <div>
+            <div class="card-header-badge" id="recipientBadge">🌸 NÀNG THƠ UAC</div>
+            <h2 class="card-recipient-name" id="recipientName">Họ và Tên</h2>
+            <div class="card-recipient-dept" id="recipientDept">Ban Chuyên Môn</div>
+
+            <div class="card-quote-box" id="quoteText">
+              "Nơi nào có nghệ thuật, nơi đó có em tỏa sắc."
+            </div>
+
+            <div class="card-wish-text" id="wishText">
+              Lời chúc cá nhân hóa sâu sắc dành riêng cho bạn nhân dịp ngày Phụ nữ Việt Nam 20/10...
+            </div>
+          </div>
+
+          <!-- Signature Section -->
+          <div class="card-signature">
+            <div class="sig-info">
+              <div class="sig-club">Gia Đình Nghệ Thuật UAC</div>
+              <div class="sig-sub">UEd's Art Club • Nơi nghệ thuật cất lời</div>
+            </div>
+            <div class="sig-date">20.10.2026</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sanctuary Action Buttons -->
+    <div class="sanctuary-actions">
+      <button class="act-btn act-btn-export" id="btnExportStory">
+        <span>📸</span> Tải Thiệp Kỷ Niệm (Story)
+      </button>
+      <button class="act-btn act-btn-heart" id="btnHeart">
+        <span>💖</span> Thả Tim Yêu Thương <span class="heart-counter" id="heartCount">999+</span>
+      </button>
+    </div>
+  </section>
+
+
+  <!-- ========================================================
+       SECTION 5: INTERACTIVE MASCOT COMPANION (BÉ Ê A XU STORYTELLER)
+       ======================================================== -->
+  <div class="mascot-companion-widget" id="mascotCompanionWidget">
+    <!-- Dynamic Speech Bubble -->
+    <div class="mascot-bubble" id="mascotBubble">
+      <span class="bubble-sprout-tag" id="bubbleSproutTag">🌱 BÉ Ê A XU:</span>
+      <div id="mascotBubbleText">
+        Chị ơi, xem video xong chị vuốt xuống dưới để nhận món quà 20/10 nha! 👇✨
+      </div>
+    </div>
+
+    <!-- 2D Pixel Mascot Button & Attention Callout Row -->
+    <div class="mascot-avatar-row">
+      <div class="mascot-btn" id="mascotCompanion" title="Bấm vào Bé ê a xu để đổi biểu cảm!">
+        <img class="pixel-sprite" id="companionMascotImg" src="assets/mascot/be_mam_wave.png" alt="Bé ê a xu Pixel Mascot">
+      </div>
+
+      <!-- Mũi tên lượn nhẹ & Lời nhắc chú ý Bé ê a xu -->
+      <div class="mascot-attention-hint" id="mascotAttentionHint" title="Bấm vào để Bé ê a xu chào chị nè!">
+        <span class="attention-badge">Các chị để ý em 1 tí 🥺✨</span>
+        <svg class="curved-arrow-svg" viewBox="0 0 65 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Đường cong lượn nhẹ trỏ sang trái về phía Bé ê a xu -->
+          <path d="M 58 6 C 40 0, 42 28, 14 28" stroke="#E07A8B" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="4 3"/>
+          <path d="M 24 20 L 12 28 L 24 36" stroke="#E07A8B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Data & Application Logic Scripts -->
+  <script src="assets/js/data.js?v=20108"></script>
+  <script src="assets/js/app.js?v=20108"></script>
+</body>
+</html>
