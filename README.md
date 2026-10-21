@@ -17,6 +17,9 @@ Trang web kỷ niệm ngày Phụ nữ Việt Nam 20/10 dành riêng cho 36 thà
 │   └── index.html               # Trang quản trị: Cấp phát pass, copy link gửi riêng, preview thiệp 36 thành viên
 │
 ├── assets/
+│   ├── images/
+│   │   └── preview_web.png      # Ảnh banner preview khi chia sẻ link lên Facebook, Zalo, Messenger (1917x1077)
+│   │
 │   ├── css/
 │   │   └── styles.css           # Toàn bộ hiệu ứng Liquid Glass, Neo-Brutalism, Confetti, Animations
 │   │

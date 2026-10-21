@@ -74,11 +74,20 @@
   --transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-* {
+*, *::before, *::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body, button, input, select, textarea, optgroup {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+button, input, select, textarea {
+  font-family: inherit !important;
 }
 
 body {
@@ -522,6 +531,7 @@ body {
 
 .btn-open-surprise {
   position: relative;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   background: linear-gradient(135deg, #E07A8B 0%, #C85A70 100%);
   border: 3px solid rgba(255, 255, 255, 0.95);
   color: #FFFFFF;
@@ -539,6 +549,11 @@ body {
   transition: var(--transition);
   overflow: hidden;
   animation: surpriseBtnPulse 2.6s infinite;
+}
+
+.btn-open-surprise span {
+  font-family: inherit !important;
+  font-weight: 800;
 }
 
 @keyframes surpriseBtnPulse {
@@ -792,6 +807,7 @@ body {
 
 .btn-submit-auth {
   margin-top: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
   background: linear-gradient(135deg, var(--pink-primary) 0%, var(--rose-deep) 100%);
   color: #FFFFFF;
   border: none;
@@ -880,6 +896,7 @@ body {
 }
 
 .btn-logout {
+  font-family: inherit !important;
   background: #FFFDF9;
   border: 1px solid #F0D9DD;
   color: var(--text-muted);
@@ -1085,6 +1102,7 @@ body {
 }
 
 .act-btn {
+  font-family: inherit !important;
   padding: 15px 32px;
   border-radius: var(--radius-full);
   font-size: 1.05rem;
@@ -1376,6 +1394,7 @@ body {
   }
 
   .btn-open-surprise {
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
     padding: 16px 24px;
     font-size: clamp(1.05rem, 4vw, 1.2rem);
     width: 100%;
