@@ -84,7 +84,7 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   
   <!-- CSS Styles with cache buster -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=20119">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20120">
 </head>
 <body>
 
@@ -103,6 +103,18 @@
     <div class="scroll-down-hint" id="scrollDownHint" title="Bấm để cuộn xuống">
       <span class="scroll-arrow">👇</span>
       <span>Vuốt xuống nhận quà nè ✦</span>
+<!-- Mascot Cheer Note cho Hậu Trường -->
+          <div class="singing-mascot-cheer bts-mascot-cheer">
+            <div class="cheer-mascot-img-wrap">
+              <img class="pixel-sprite" src="assets/mascot/be_mam_slam.png" alt="Bé ê a xu Cười Tít Mắt">
+            </div>
+            <div class="cheer-speech">
+              <p><strong>Bé ê a xu bật mí:</strong> "Đằng sau clip nghiêm túc là cả bầu trời lầy lội và dễ thương của các anh chàng UAC đó ạ! 😆🍿✨"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -165,7 +177,53 @@
         </div>
       </div>
 
-    </div>
+    
+      <!-- PHẦN 3: HẬU TRƯỜNG "MẤY ANH NÀY DỄ THƯƠNG" (DƯỚI VID HÁT) -->
+      <div class="behind-scenes-block" id="behindScenesBlock">
+        <div class="singing-header">
+          <div class="singing-badge badge-bts">
+            <span>🎬 GÓC HẬU TRƯỜNG SIÊU ĐÁNG YÊU • UAC BOYS ✦</span>
+          </div>
+          <h2 class="singing-title">
+            Mấy anh này dễ thương
+          </h2>
+          <p class="singing-desc bts-desc">
+            Những khoảnh khắc lầy lội, tập luyện hăng say đằng sau món quà 20/10 gửi đến các nàng thơ 🌸✨
+          </p>
+        </div>
+
+        <!-- Video Player Liquid Glass Frame cho Video Dọc (Portrait) -->
+        <div class="bts-player-card">
+          <div class="bts-video-wrap">
+            <video class="bts-video" id="btsVideo" controls playsinline preload="metadata" poster="assets/video/hau_truong_poster.jpg">
+              <source src="assets/video/hau_truong.mp4" type="video/mp4">
+              Trình duyệt của bạn không hỗ trợ phát video này.
+            </video>
+
+            <!-- Play Overlay -->
+            <div class="singing-play-overlay" id="btsPlayOverlay">
+              <button class="btn-play-singing" id="btnPlayBts" type="button" aria-label="Bật video hậu trường">
+                <span class="play-icon">▶</span>
+              </button>
+              <div class="play-prompt-text">
+                <span class="play-main-txt">Xem hậu trường cực hài hước ✦</span>
+                <span class="play-sub-txt">Bấm để xem các anh tập luyện nè 🎬✨</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mascot Cheer Note cho Hậu Trường -->
+          <div class="singing-mascot-cheer bts-mascot-cheer">
+            <div class="cheer-mascot-img-wrap">
+              <img class="pixel-sprite" src="assets/mascot/be_mam_slam.png" alt="Bé ê a xu Cười Tít Mắt">
+            </div>
+            <div class="cheer-speech">
+              <p><strong>Bé ê a xu bật mí:</strong> "Đằng sau clip nghiêm túc là cả bầu trời lầy lội và dễ thương của các anh chàng UAC đó ạ! 😆🍿✨"</p>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
   </section>
 
 
@@ -372,6 +430,6 @@
 
   <!-- Data & Application Logic Scripts -->
   <script src="assets/js/data.js?v=20118"></script>
-  <script src="assets/js/app.js?v=20119"></script>
+  <script src="assets/js/app.js?v=20120"></script>
 </body>
 </html>

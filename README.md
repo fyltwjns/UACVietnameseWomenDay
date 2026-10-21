@@ -48,7 +48,9 @@ UACVietnameseWomenDay/
 │   └── video/                   # Video chính chất lượng cao
 │       ├── video_hero.mp4       # Video hero cinematic đầu trang (10 MB)
 │       ├── video_hat_tang.mp4   # Video các bạn nam hát tặng chị em (58 MB)
-│       └── video_hat_tang_poster.jpg # Poster preview cho video hát
+│       ├── video_hat_tang_poster.jpg # Poster preview cho video hát
+│       ├── hau_truong.mp4       # Video hậu trường siêu dễ thương (4.3 MB)
+│       └── hau_truong_poster.jpg # Poster preview cho video hậu trường
 │
 └── docs/
     └── Prompt_Petal_Chase_20_10_Fixed.pdf # Tài liệu thiết kế gốc

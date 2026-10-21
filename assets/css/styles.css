@@ -443,6 +443,84 @@ body {
   border-top: 1px dashed rgba(224, 122, 139, 0.3);
 }
 
+/* Hậu Trường Block ("Mấy anh này dễ thương") - Nằm ngay dưới video hát */
+.behind-scenes-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  margin-top: 54px;
+  padding-top: 50px;
+  border-top: 2px dashed rgba(224, 122, 139, 0.35);
+  position: relative;
+}
+
+.behind-scenes-block::before {
+  content: "🎬 ✨ 🍿";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-cream, #FFFBF5);
+  padding: 0 16px;
+  font-size: 1.15rem;
+  letter-spacing: 4px;
+}
+
+.badge-bts {
+  background: rgba(255, 237, 213, 0.95);
+  color: #C2410C;
+  border: 1px solid rgba(251, 146, 60, 0.35);
+}
+
+.bts-desc {
+  max-width: 600px;
+  margin: 10px auto 0;
+  text-align: center;
+}
+
+.bts-player-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(24px) saturate(140%);
+  -webkit-backdrop-filter: blur(24px) saturate(140%);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 28px;
+  padding: 14px;
+  box-shadow: 0 25px 60px -12px rgba(224, 122, 139, 0.22), 0 0 0 1px rgba(224, 122, 139, 0.1);
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.bts-player-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 32px 75px -15px rgba(224, 122, 139, 0.32), 0 0 0 1px rgba(224, 122, 139, 0.18);
+}
+
+.bts-video-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 480 / 848;
+  background: #0D0E12;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+}
+
+.bts-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  background: #000;
+}
+
+.bts-mascot-cheer {
+  background: rgba(255, 247, 237, 0.9);
+  border-color: rgba(251, 146, 60, 0.25);
+}
+
 /* ========================================================
    SECTION 2: GREETING & CTA (FALLBACK COMPATIBILITY)
    ======================================================== */
@@ -1580,6 +1658,22 @@ body {
   .singing-player-card {
     padding: 10px;
     border-radius: 22px;
+  }
+
+  .behind-scenes-block {
+    margin-top: 38px;
+    padding-top: 38px;
+    gap: 18px;
+  }
+
+  .bts-player-card {
+    max-width: 350px;
+    padding: 8px;
+    border-radius: 20px;
+  }
+
+  .bts-video-wrap {
+    border-radius: 14px;
   }
   
   .btn-play-singing {

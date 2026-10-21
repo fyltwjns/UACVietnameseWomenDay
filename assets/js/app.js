@@ -29,6 +29,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const singingVideo = document.getElementById('singingVideo');
   const singingPlayOverlay = document.getElementById('singingPlayOverlay');
   const btnPlaySinging = document.getElementById('btnPlaySinging');
+
+  // Behind-the-scenes Video Elements ("Mấy anh này dễ thương")
+  const btsVideo = document.getElementById('btsVideo');
+  const btsPlayOverlay = document.getElementById('btsPlayOverlay');
+  const btnPlayBts = document.getElementById('btnPlayBts');
   
   // Mascot Companion
   const mascotBubbleText = document.getElementById('mascotBubbleText');
@@ -430,6 +435,10 @@ document.addEventListener('DOMContentLoaded', () => {
           heroVideo.pause();
         }
       }
+      // 3. Tạm dừng video hậu trường nếu đang phát
+      if (btsVideo && !btsVideo.paused) {
+        btsVideo.pause();
+      }
       if (singingPlayOverlay) {
         singingPlayOverlay.classList.add('hidden');
       }
@@ -481,6 +490,72 @@ document.addEventListener('DOMContentLoaded', () => {
       singingPlayOverlay.addEventListener('click', () => {
         if (singingVideo.paused) {
           singingVideo.play().catch(err => console.log('Video play error:', err));
+        }
+      });
+    }
+  }
+
+  // Behind The Scenes Video ("Mấy anh này dễ thương")
+  if (btsVideo) {
+    const onBtsPlay = () => {
+      // 1. Dừng nhạc nền ambient
+      stopGentleMusic();
+
+      // 2. Tạm dừng hero video & singing video để ưu tiên video hậu trường
+      if (heroVideo) {
+        heroVideo.muted = true;
+        if (!heroVideo.paused) {
+          heroVideo.pause();
+        }
+      }
+      if (singingVideo && !singingVideo.paused) {
+        singingVideo.pause();
+      }
+
+      if (btsPlayOverlay) {
+        btsPlayOverlay.classList.add('hidden');
+      }
+      setMascotDialogue("Mấy anh UAC lúc tập luyện hậu trường nhìn hài hước và dễ thương xỉu luôn á chị ơi! 😆🎬🍿");
+    };
+
+    const onBtsPauseOrEnd = () => {
+      if (btsVideo.ended) {
+        if (btsPlayOverlay) {
+          btsPlayOverlay.classList.remove('hidden');
+        }
+        setMascotDialogue("Hậu trường lầy lội quá trời luôn! Giờ chị nhớ bấm nút mở quà của riêng mình nha! 🌸💖");
+      }
+
+      // Khôi phục nhạc nền nếu chưa vào sanctuary
+      if (audioContext && audioContext.state === 'suspended' && currentStep !== 'sanctuary') {
+        audioContext.resume().then(() => {
+          startGentleMusic();
+        }).catch(() => {
+          startGentleMusic();
+        });
+      } else if (currentStep !== 'sanctuary') {
+        startGentleMusic();
+      }
+    };
+
+    btsVideo.addEventListener('play', onBtsPlay);
+    btsVideo.addEventListener('playing', onBtsPlay);
+    btsVideo.addEventListener('pause', onBtsPauseOrEnd);
+    btsVideo.addEventListener('ended', onBtsPauseOrEnd);
+
+    if (btnPlayBts) {
+      btnPlayBts.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (btsVideo.paused) {
+          btsVideo.play().catch(err => console.log('BTS video play error:', err));
+        }
+      });
+    }
+
+    if (btsPlayOverlay) {
+      btsPlayOverlay.addEventListener('click', () => {
+        if (btsVideo.paused) {
+          btsVideo.play().catch(err => console.log('BTS video play error:', err));
         }
       });
     }
@@ -770,6 +845,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (singingSection) {
         singingSection.style.display = 'none';
         if (singingVideo && !singingVideo.paused) singingVideo.pause();
+        if (btsVideo && !btsVideo.paused) btsVideo.pause();
       }
       if (greetingSection) greetingSection.style.display = 'none';
       sanctuarySection.classList.add('active');
