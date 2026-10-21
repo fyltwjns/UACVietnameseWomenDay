@@ -529,20 +529,125 @@ document.addEventListener('DOMContentLoaded', () => {
   // Start 5-second automatic wish rotation
   startWishRotation();
 
-  // Demo chips quick auto-fill (nếu có)
-  if (demoChips && demoChips.length > 0) {
-    demoChips.forEach(chip => {
-      chip.addEventListener('click', () => {
-        const u = chip.getAttribute('data-user');
-        const p = chip.getAttribute('data-pass');
+  // ==========================================
+  // Tra cứu Nickname & Pass (Cho các nàng tự mò)
+  // ==========================================
+  const btnOpenLookup = document.getElementById('btnOpenLookup');
+  const lookupModal = document.getElementById('lookupModal');
+  const btnCloseLookup = document.getElementById('btnCloseLookup');
+  const lookupSearchInput = document.getElementById('lookupSearchInput');
+  const btnClearLookupSearch = document.getElementById('btnClearLookupSearch');
+  const lookupTableBody = document.getElementById('lookupTableBody');
+  const lookupEmpty = document.getElementById('lookupEmpty');
+
+  function renderLookupList(query = '') {
+    if (!lookupTableBody) return;
+    const members = getActiveMembers();
+    const qNorm = normalizeText(query);
+
+    const filtered = members.filter(m => {
+      if (!qNorm) return true;
+      const nameNorm = normalizeText(m.fullName || '');
+      const deptNorm = normalizeText(m.department || '');
+      const userNorm = normalizeText(m.username || '');
+      return nameNorm.includes(qNorm) || deptNorm.includes(qNorm) || userNorm.includes(qNorm);
+    });
+
+    if (filtered.length === 0) {
+      lookupTableBody.innerHTML = '';
+      if (lookupEmpty) lookupEmpty.style.display = 'block';
+      return;
+    }
+
+    if (lookupEmpty) lookupEmpty.style.display = 'none';
+    lookupTableBody.innerHTML = filtered.map(m => `
+      <tr>
+        <td>
+          <div class="lookup-user-cell">
+            <span class="lookup-user-name">${m.fullName}</span>
+            ${m.badge ? `<span class="lookup-user-badge">${m.badge}</span>` : ''}
+          </div>
+        </td>
+        <td><span class="lookup-dept-text">${m.department}</span></td>
+        <td><code class="lookup-code-chip">${m.username}</code></td>
+        <td><code class="lookup-code-chip lookup-pass-chip">${m.password}</code></td>
+        <td>
+          <button type="button" class="btn-lookup-pick" data-user="${m.username}" data-pass="${m.password}" title="Chọn mở thiệp của ${m.fullName}">
+            Chọn nè ✨
+          </button>
+        </td>
+      </tr>
+    `).join('');
+
+    // Bắt sự kiện chọn tài khoản
+    lookupTableBody.querySelectorAll('.btn-lookup-pick').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const u = btn.getAttribute('data-user');
+        const p = btn.getAttribute('data-pass');
         authUsername.value = u;
         authPassword.value = p;
         authError.classList.remove('active');
         playCuteBeep();
+        
+        // Đóng modal tra cứu
+        if (lookupModal) lookupModal.classList.remove('active');
+        
+        // Tự động mở hộp quà sau 300ms
         setTimeout(() => {
           authForm.dispatchEvent(new Event('submit'));
-        }, 250);
+        }, 300);
       });
+    });
+  }
+
+  if (btnOpenLookup) {
+    btnOpenLookup.addEventListener('click', () => {
+      playCuteBeep();
+      if (lookupModal) {
+        lookupModal.classList.add('active');
+        renderLookupList(lookupSearchInput ? lookupSearchInput.value : '');
+        setTimeout(() => {
+          if (lookupSearchInput) lookupSearchInput.focus();
+        }, 250);
+      }
+    });
+  }
+
+  if (btnCloseLookup) {
+    btnCloseLookup.addEventListener('click', () => {
+      if (lookupModal) lookupModal.classList.remove('active');
+    });
+  }
+
+  // Đóng modal tra cứu khi click ra nền ngoài
+  if (lookupModal) {
+    lookupModal.addEventListener('click', (e) => {
+      if (e.target === lookupModal) {
+        lookupModal.classList.remove('active');
+      }
+    });
+  }
+
+  // Lọc tìm kiếm thời gian thực
+  if (lookupSearchInput) {
+    lookupSearchInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      if (btnClearLookupSearch) {
+        btnClearLookupSearch.style.display = val ? 'block' : 'none';
+      }
+      renderLookupList(val);
+    });
+  }
+
+  if (btnClearLookupSearch) {
+    btnClearLookupSearch.addEventListener('click', () => {
+      if (lookupSearchInput) {
+        lookupSearchInput.value = '';
+        lookupSearchInput.focus();
+      }
+      btnClearLookupSearch.style.display = 'none';
+      renderLookupList('');
     });
   }
 
@@ -643,9 +748,10 @@ document.addEventListener('DOMContentLoaded', () => {
     wishText.textContent = member.personalWish;
   }
 
-  // Logout / Switch User
+  // Return Home / Switch User
   if (btnLogout) {
     btnLogout.addEventListener('click', () => {
+      playCuteBeep();
       sanctuarySection.classList.remove('active');
       if (heroVideoSection) heroVideoSection.style.display = 'flex';
       if (singingSection) singingSection.style.display = 'flex';
@@ -654,6 +760,7 @@ document.addEventListener('DOMContentLoaded', () => {
       authPassword.value = '';
       currentStep = 'hero';
       pickMascotLine('hero');
+      resetWishRotation();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }

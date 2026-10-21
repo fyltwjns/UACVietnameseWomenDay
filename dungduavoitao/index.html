@@ -709,13 +709,13 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Link ảnh đại diện (Ảnh hiển thị trên thiệp)</label>
-          <input type="url" class="form-input" id="editPhoto" required>
+          <label class="form-label">Link ảnh đại diện (Đường dẫn local hoặc URL)</label>
+          <input type="text" class="form-input" id="editPhoto" required placeholder="Ví dụ: assets/photos/my.jpg">
         </div>
 
         <div class="form-group">
           <label class="form-label">Link ảnh Google Drive gốc (Form)</label>
-          <input type="url" class="form-input" id="editDriveUrl">
+          <input type="text" class="form-input" id="editDriveUrl" placeholder="Ví dụ: https://drive.google.com/...">
         </div>
 
         <div class="form-group">
@@ -1059,7 +1059,7 @@ Chúc bạn một ngày 20/10 thật rực rỡ, ngọt ngào và hạnh phúc n
       memberForm.reset();
       document.getElementById('editPassword').value = '2010*uac';
       document.getElementById('editBadge').value = '🌸 Nàng Thơ UAC';
-      document.getElementById('editPhoto').value = 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80';
+      document.getElementById('editPhoto').value = 'assets/photos/ha.jpg';
       document.getElementById('editWish').value = 'Chúc bạn ngày 20/10 ngập tràn niềm vui, luôn rạng rỡ xinh đẹp và tự tin tỏa sáng dưới mái nhà CLB Nghệ thuật UAC - UEd nhé! 💖✨';
       
       modalTitle.textContent = 'Thêm Nàng Thơ Mới ✦';

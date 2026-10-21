@@ -84,7 +84,7 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
   
   <!-- CSS Styles with cache buster -->
-  <link rel="stylesheet" href="assets/css/styles.css?v=20110">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20115">
 </head>
 <body>
 
@@ -211,6 +211,65 @@
           <span>✨ Mở Hộp Quà Bí Mật ✦</span>
         </button>
       </form>
+
+      <!-- Nút Tra Cứu Pass Cho Các Nàng Tự Mò -->
+      <div class="auth-lookup-box">
+        <button type="button" class="btn-open-lookup" id="btnOpenLookup">
+          <span class="lookup-btn-icon">🔍</span>
+          <span>Chưa biết nickname & pass? <strong>Tra cứu tại đây nè! ✦</strong></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ========================================================
+       MODAL TRA CỨU NICKNAME & PASS (CHO CÁC NÀNG TỰ MÒ)
+       ======================================================== -->
+  <div class="modal-overlay lookup-modal-overlay" id="lookupModal">
+    <div class="lookup-card">
+      <button class="modal-close-btn" id="btnCloseLookup" title="Đóng">&times;</button>
+      
+      <div class="lookup-header">
+        <span class="lookup-badge">🗝️ SỔ TAY BÍ MẬT UAC</span>
+        <h3 class="lookup-title">Tra Cứu Nickname & Pass ✨</h3>
+        <p class="lookup-desc">
+          Các nàng thơ tìm đúng tên mình để lấy chìa khóa mở hộp quà nhé!
+        </p>
+      </div>
+
+      <!-- Live Search Box -->
+      <div class="lookup-search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="lookupSearchInput" placeholder="Nhập tên hoặc ban của bạn để tìm nhanh..." autocomplete="off">
+        <button type="button" class="search-clear-btn" id="btnClearLookupSearch" title="Xóa tìm kiếm">&times;</button>
+      </div>
+
+      <!-- Table Container -->
+      <div class="lookup-table-container">
+        <table class="lookup-table">
+          <thead>
+            <tr>
+              <th>Họ và Tên</th>
+              <th>Ban / Bộ phận</th>
+              <th>Nickname</th>
+              <th>Pass</th>
+              <th>Thao tác</th>
+            </tr>
+          </thead>
+          <tbody id="lookupTableBody">
+            <!-- Dynamically populated from UAC_MEMBERS -->
+          </tbody>
+        </table>
+        
+        <div class="lookup-empty" id="lookupEmpty" style="display: none;">
+          <span>🌸</span> Không tìm thấy nàng thơ nào với từ khóa này rồi chị ơi!
+        </div>
+      </div>
+
+      <div class="lookup-footer-note">
+        <span>💡 Bấm nút <strong>"Chọn nè ✨"</strong> để tự động điền Nickname & Pass và mở hộp quà ngay nha!</span>
+      </div>
     </div>
   </div>
 
@@ -221,12 +280,8 @@
   <section class="sanctuary-section" id="sanctuarySection">
     <!-- Sanctuary Navbar -->
     <div class="sanctuary-nav">
-      <div class="uac-badge">
-        <span class="badge-icon">🌸</span>
-        <span>UAC • Kỷ Niệm 20/10 Độc Bản</span>
-      </div>
-      <button class="btn-logout" id="btnLogout">
-        <span>🚪</span> Đổi Tài Khoản Khác
+      <button class="btn-logout" id="btnLogout" title="Về trang chủ">
+        <span>🏠</span> Về Trang Chủ
       </button>
     </div>
 
@@ -246,6 +301,11 @@
             <img class="user-photo" id="userPhoto" src="" alt="Chân dung nàng thơ UAC">
             <div class="portrait-tag" id="userTag">UAC ARTIST</div>
           </div>
+
+          <!-- Nút Tải Thiệp Kỷ Niệm (Story) ngay dưới ảnh chân dung -->
+          <button class="act-btn act-btn-export" id="btnExportStory" title="Tải ảnh thiệp 9:16 để đăng Story Facebook / Instagram">
+            <span>📸</span> Tải Thiệp Kỷ Niệm (Story)
+          </button>
         </div>
 
         <!-- Right Column: Heartfelt Wish & Details -->
@@ -275,16 +335,6 @@
         </div>
 
       </div>
-    </div>
-
-    <!-- Sanctuary Action Buttons -->
-    <div class="sanctuary-actions">
-      <button class="act-btn act-btn-export" id="btnExportStory">
-        <span>📸</span> Tải Thiệp Kỷ Niệm (Story)
-      </button>
-      <button class="act-btn act-btn-heart" id="btnHeart">
-        <span>💖</span> Thả Tim Yêu Thương <span class="heart-counter" id="heartCount">999+</span>
-      </button>
     </div>
   </section>
 
@@ -321,7 +371,7 @@
 
 
   <!-- Data & Application Logic Scripts -->
-  <script src="assets/js/data.js?v=20108"></script>
-  <script src="assets/js/app.js?v=20108"></script>
+  <script src="assets/js/data.js?v=20115"></script>
+  <script src="assets/js/app.js?v=20115"></script>
 </body>
 </html>
