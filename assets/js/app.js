@@ -251,12 +251,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Gentle acoustic ambient loop (Marimba & Soft Rhodes chime)
   let isSingingVideoPlaying = false;
+  let isBtsVideoPlaying = false;
   let musicTimer = null;
   let activeNoteTimeouts = [];
 
+  function isMediaVideoPlaying() {
+    const singingActive = singingVideo && !singingVideo.paused && !singingVideo.ended;
+    const btsActive = btsVideo && !btsVideo.paused && !btsVideo.ended;
+    return isSingingVideoPlaying || isBtsVideoPlaying || singingActive || btsActive;
+  }
+
   function startGentleMusic() {
-    // Tuyệt đối không bật nhạc nền nếu video hát đang phát
-    if (isSingingVideoPlaying) return;
+    // Tuyệt đối không bật nhạc nền nếu video hát hoặc video hậu trường đang phát
+    if (isMediaVideoPlaying()) return;
     if (isAudioPlaying) return;
     initAudio();
     isAudioPlaying = true;
@@ -273,7 +280,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let chordIdx = 0;
 
     function playArp() {
-      if (!isAudioPlaying || isSingingVideoPlaying) return;
+      if (!isAudioPlaying || isMediaVideoPlaying()) return;
       if (!audioContext) return;
       if (audioContext.state === 'suspended') {
         audioContext.resume();
@@ -282,7 +289,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const currentNotes = chords[chordIdx];
       currentNotes.forEach((f, i) => {
         const tid = setTimeout(() => {
-          if (!isAudioPlaying || isSingingVideoPlaying || !audioContext) return;
+          if (!isAudioPlaying || isMediaVideoPlaying() || !audioContext) return;
           try {
             const osc = audioContext.createOscillator();
             const gain = audioContext.createGain();
@@ -328,12 +335,12 @@ document.addEventListener('DOMContentLoaded', () => {
     isVideoPausedAtEnd = true;
     videoLoopCount++;
 
-    // Từ lần loop thứ 2 trở đi (ngay khi lần 1 kết thúc): tắt tiếng video, bật nhạc nền cute (nếu video hát không chạy)
+    // Từ lần loop thứ 2 trở đi (ngay khi lần 1 kết thúc): tắt tiếng video, bật nhạc nền cute (nếu video hát/hậu trường không chạy)
     if (videoLoopCount >= 1) {
       if (heroVideo) {
         heroVideo.muted = true;
       }
-      if (!isAudioPlaying && !isSingingVideoPlaying) {
+      if (!isAudioPlaying && !isMediaVideoPlaying()) {
         startGentleMusic();
       }
     }
@@ -364,14 +371,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function activateAudioSystem() {
-    if (isSingingVideoPlaying) return;
+    if (isMediaVideoPlaying()) {
+      stopGentleMusic();
+      return;
+    }
     initAudio();
     if (videoLoopCount === 0) {
       // Lần đầu tiên (Loop 1): bật tiếng video gốc, chưa bật nhạc nền để không bị chồng tiếng
       if (heroVideo) {
         heroVideo.muted = false;
         heroVideo.volume = 1.0;
-        if (heroVideo.paused && !isVideoPausedAtEnd && !isSingingVideoPlaying) {
+        if (heroVideo.paused && !isVideoPausedAtEnd && !isMediaVideoPlaying()) {
           heroVideo.play().catch(() => {});
         }
       }
@@ -380,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (heroVideo) {
         heroVideo.muted = true;
       }
-      if (!isAudioPlaying && !isSingingVideoPlaying) {
+      if (!isAudioPlaying && !isMediaVideoPlaying()) {
         startGentleMusic();
       }
     }
@@ -454,21 +464,23 @@ document.addEventListener('DOMContentLoaded', () => {
         setMascotDialogue("Khúc ca ngọt ngào quá! Giờ chị hãy bấm nút mở hộp quà bí mật của riêng mình nhé! 🎁✨");
       }
       
-      // Tiếp tục phát hero video ở chế độ tắt tiếng nếu chưa vào sanctuary
-      if (heroVideo && heroVideo.paused && currentStep !== 'sanctuary') {
+      // Tiếp tục phát hero video ở chế độ tắt tiếng nếu chưa vào sanctuary và không có video nào phát
+      if (heroVideo && heroVideo.paused && currentStep !== 'sanctuary' && !isMediaVideoPlaying()) {
         heroVideo.muted = true;
         heroVideo.play().catch(() => {});
       }
 
-      // Khôi phục nhạc nền nhẹ nhàng sau khi video hát dừng hoặc kết thúc
-      if (audioContext && audioContext.state === 'suspended') {
-        audioContext.resume().then(() => {
+      // Khôi phục nhạc nền nhẹ nhàng sau khi video hát dừng hoặc kết thúc (nếu không có video nào đang phát)
+      if (!isMediaVideoPlaying() && currentStep !== 'sanctuary') {
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume().then(() => {
+            startGentleMusic();
+          }).catch(() => {
+            startGentleMusic();
+          });
+        } else {
           startGentleMusic();
-        }).catch(() => {
-          startGentleMusic();
-        });
-      } else {
-        startGentleMusic();
+        }
       }
     };
 
@@ -480,6 +492,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPlaySinging) {
       btnPlaySinging.addEventListener('click', (e) => {
         e.stopPropagation();
+        stopGentleMusic();
         if (singingVideo.paused) {
           singingVideo.play().catch(err => console.log('Video play error:', err));
         }
@@ -488,6 +501,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (singingPlayOverlay) {
       singingPlayOverlay.addEventListener('click', () => {
+        stopGentleMusic();
         if (singingVideo.paused) {
           singingVideo.play().catch(err => console.log('Video play error:', err));
         }
@@ -498,16 +512,18 @@ document.addEventListener('DOMContentLoaded', () => {
   // Behind The Scenes Video ("Mấy anh này dễ thương")
   if (btsVideo) {
     const onBtsPlay = () => {
-      // 1. Dừng nhạc nền ambient
+      isBtsVideoPlaying = true;
+      // 1. Dừng ngay lập tức nhạc nền ambient và hủy toàn bộ nốt đang chờ
       stopGentleMusic();
 
-      // 2. Tạm dừng hero video & singing video để ưu tiên video hậu trường
+      // 2. Tắt tiếng hero video và tạm pause hero video để ưu tiên trọn vẹn âm thanh video hậu trường
       if (heroVideo) {
         heroVideo.muted = true;
         if (!heroVideo.paused) {
           heroVideo.pause();
         }
       }
+      // 3. Tạm dừng video hát nếu đang phát
       if (singingVideo && !singingVideo.paused) {
         singingVideo.pause();
       }
@@ -519,6 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const onBtsPauseOrEnd = () => {
+      isBtsVideoPlaying = false;
       if (btsVideo.ended) {
         if (btsPlayOverlay) {
           btsPlayOverlay.classList.remove('hidden');
@@ -526,15 +543,23 @@ document.addEventListener('DOMContentLoaded', () => {
         setMascotDialogue("Hậu trường lầy lội quá trời luôn! Giờ chị nhớ bấm nút mở quà của riêng mình nha! 🌸💖");
       }
 
-      // Khôi phục nhạc nền nếu chưa vào sanctuary
-      if (audioContext && audioContext.state === 'suspended' && currentStep !== 'sanctuary') {
-        audioContext.resume().then(() => {
+      // Tiếp tục phát hero video ở chế độ tắt tiếng nếu chưa vào sanctuary và không có video nào phát
+      if (heroVideo && heroVideo.paused && currentStep !== 'sanctuary' && !isMediaVideoPlaying()) {
+        heroVideo.muted = true;
+        heroVideo.play().catch(() => {});
+      }
+
+      // Khôi phục nhạc nền nếu chưa vào sanctuary và không có video nào đang phát
+      if (!isMediaVideoPlaying() && currentStep !== 'sanctuary') {
+        if (audioContext && audioContext.state === 'suspended') {
+          audioContext.resume().then(() => {
+            startGentleMusic();
+          }).catch(() => {
+            startGentleMusic();
+          });
+        } else {
           startGentleMusic();
-        }).catch(() => {
-          startGentleMusic();
-        });
-      } else if (currentStep !== 'sanctuary') {
-        startGentleMusic();
+        }
       }
     };
 
@@ -546,6 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnPlayBts) {
       btnPlayBts.addEventListener('click', (e) => {
         e.stopPropagation();
+        stopGentleMusic();
         if (btsVideo.paused) {
           btsVideo.play().catch(err => console.log('BTS video play error:', err));
         }
@@ -554,6 +580,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btsPlayOverlay) {
       btsPlayOverlay.addEventListener('click', () => {
+        stopGentleMusic();
         if (btsVideo.paused) {
           btsVideo.play().catch(err => console.log('BTS video play error:', err));
         }
@@ -1024,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.textAlign = 'center';
     ctx.fillStyle = '#C85A70';
     ctx.font = 'bold 36px "Plus Jakarta Sans", sans-serif';
-    ctx.fillText('✦ UAC • UED\'S ART CLUB ✦', 540, 130);
+    ctx.fillText('✦ UAC • UEd\'s Art Club ✦', 540, 130);
 
     ctx.fillStyle = '#827574';
     ctx.font = '600 28px "Plus Jakarta Sans", sans-serif';

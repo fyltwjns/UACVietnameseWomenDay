@@ -1,6 +1,6 @@
 # 🌸 UAC Art Club - Kỷ Niệm 20/10 Độc Bản
 
-Trang web kỷ niệm ngày Phụ nữ Việt Nam 20/10 dành riêng cho 39 thành viên nữ UAC Art Club (UED's Art Club).
+Trang web kỷ niệm ngày Phụ nữ Việt Nam 20/10 dành riêng cho 39 thành viên nữ UAC Art Club (UEd's Art Club).
 
 ---
 
