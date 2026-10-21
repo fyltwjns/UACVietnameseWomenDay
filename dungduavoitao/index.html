@@ -742,43 +742,25 @@
   </div>
 
   <!-- Data Script with cache buster -->
-  <script src="../assets/js/data.js?v=20118"></script>
+  <script src="../assets/js/data.js?v=20261021_v2"></script>
 
   <!-- Admin Script -->
   <script>
-    // Load members from localStorage or data.js with auto-merge for new members
+    // Load members from localStorage or data.js with auto-version sync
+    const CURRENT_DATA_VERSION = window.UAC_DATA_VERSION || "20261021_v2";
     function getStoredMembers() {
       let list = window.UAC_MEMBERS || [];
       try {
+        const storedVersion = localStorage.getItem('UAC_DATA_VERSION');
+        if (storedVersion !== CURRENT_DATA_VERSION) {
+          localStorage.setItem('UAC_DATA_VERSION', CURRENT_DATA_VERSION);
+          localStorage.setItem('UAC_CUSTOM_MEMBERS', JSON.stringify(list));
+          return list;
+        }
         const stored = localStorage.getItem('UAC_CUSTOM_MEMBERS');
         if (stored) {
           let parsed = JSON.parse(stored);
           if (Array.isArray(parsed) && parsed.length > 0) {
-            // Auto sync fresh data & photos from window.UAC_MEMBERS
-            if (window.UAC_MEMBERS && window.UAC_MEMBERS.length > 0) {
-              parsed.forEach(p => {
-                const fresh = window.UAC_MEMBERS.find(m => m.id === p.id || m.username === p.username);
-                if (fresh) {
-                  if (fresh.photo && (!p.photo || p.photo.includes('unsplash.com'))) {
-                    p.photo = fresh.photo;
-                  }
-                  if (fresh.personalWish && (!p.personalWish || p.personalWish.length < 15)) {
-                    p.personalWish = fresh.personalWish;
-                    p.quotes = fresh.quotes;
-                  }
-                }
-              });
-
-              // Auto merge any new members from window.UAC_MEMBERS that are missing in parsed
-              window.UAC_MEMBERS.forEach(wm => {
-                const exists = parsed.some(pm => pm.id === wm.id || pm.username === wm.username);
-                if (!exists) {
-                  parsed.push(wm);
-                }
-              });
-
-              localStorage.setItem('UAC_CUSTOM_MEMBERS', JSON.stringify(parsed));
-            }
             return parsed;
           }
         }

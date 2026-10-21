@@ -55,6 +55,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnHeart = document.getElementById('btnHeart');
   const heartCountEl = document.getElementById('heartCount');
   const btnExportStory = document.getElementById('btnExportStory');
+
+  // Story Card Preview Modal (for Mobile / iPhone)
+  const storyPreviewModal = document.getElementById('storyPreviewModal');
+  const btnCloseStoryModal = document.getElementById('btnCloseStoryModal');
+  const storyPreviewImg = document.getElementById('storyPreviewImg');
+  const storyModalTitle = document.getElementById('storyModalTitle');
+  const btnStoryShare = document.getElementById('btnStoryShare');
+  const btnStoryOpenNewTab = document.getElementById('btnStoryOpenNewTab');
+  let currentStoryBlob = null;
+  let currentStoryFile = null;
+  let currentStoryUrl = null;
   
   // Card Display Elements
   const userPhoto = document.getElementById('userPhoto');
@@ -785,54 +796,20 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/[^a-z0-9]/g, '');
   }
 
+  const CURRENT_DATA_VERSION = window.UAC_DATA_VERSION || "20261021_v2";
   function getActiveMembers() {
     let list = window.UAC_MEMBERS || [];
     try {
+      const storedVersion = localStorage.getItem('UAC_DATA_VERSION');
+      if (storedVersion !== CURRENT_DATA_VERSION) {
+        localStorage.setItem('UAC_DATA_VERSION', CURRENT_DATA_VERSION);
+        localStorage.setItem('UAC_CUSTOM_MEMBERS', JSON.stringify(list));
+        return list;
+      }
       const stored = localStorage.getItem('UAC_CUSTOM_MEMBERS');
       if (stored) {
         let parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          if (window.UAC_MEMBERS && window.UAC_MEMBERS.length > 0) {
-            let changed = false;
-            // 1. Đồng bộ ảnh và lời chúc mới nhất từ data.js
-            parsed.forEach(p => {
-              const fresh = window.UAC_MEMBERS.find(m => m.id === p.id || m.username === p.username);
-              if (fresh) {
-                if (fresh.photo && (!p.photo || p.photo.includes('unsplash.com'))) {
-                  p.photo = fresh.photo;
-                  changed = true;
-                }
-                if (fresh.personalWish && (!p.personalWish || p.personalWish.length < 15)) {
-                  p.personalWish = fresh.personalWish;
-                  p.quotes = fresh.quotes;
-                  changed = true;
-                }
-                if (fresh.id > 36) {
-                  p.personalWish = fresh.personalWish;
-                  p.quotes = fresh.quotes;
-                  p.badge = fresh.badge;
-                  p.photo = fresh.photo;
-                  p.department = fresh.department;
-                  p.fullName = fresh.fullName;
-                  p.password = fresh.password;
-                  changed = true;
-                }
-              }
-            });
-
-            // 2. Tự động merge các thành viên mới thêm vào parsed
-            window.UAC_MEMBERS.forEach(wm => {
-              const exists = parsed.some(pm => pm.id === wm.id || pm.username === wm.username);
-              if (!exists) {
-                parsed.push(wm);
-                changed = true;
-              }
-            });
-
-            if (changed) {
-              localStorage.setItem('UAC_CUSTOM_MEMBERS', JSON.stringify(parsed));
-            }
-          }
           return parsed;
         }
       }
@@ -1001,8 +978,87 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // Story Image Exporter (1080 x 1920 9:16 Canvas)
+  // Story Image Exporter & Preview Modal (iOS / iPhone / Mobile Compatible)
   // ==========================================
+  function openStoryPreviewModal(data) {
+    if (!storyPreviewModal || !storyPreviewImg) return;
+    currentStoryBlob = data.blob;
+    currentStoryFile = data.file;
+    currentStoryUrl = data.imageUrl;
+
+    if (storyModalTitle) {
+      storyModalTitle.textContent = `Thiệp 20/10 Của ${data.member.fullName}`;
+    }
+    storyPreviewImg.src = data.imageUrl;
+    storyPreviewModal.classList.add('active');
+    storyPreviewModal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('modal-open');
+  }
+
+  function closeStoryPreviewModal() {
+    if (!storyPreviewModal) return;
+    storyPreviewModal.classList.remove('active');
+    storyPreviewModal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('modal-open');
+  }
+
+  if (btnCloseStoryModal) {
+    btnCloseStoryModal.addEventListener('click', closeStoryPreviewModal);
+  }
+
+  if (storyPreviewModal) {
+    storyPreviewModal.addEventListener('click', (e) => {
+      if (e.target === storyPreviewModal) {
+        closeStoryPreviewModal();
+      }
+    });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && storyPreviewModal && storyPreviewModal.classList.contains('active')) {
+      closeStoryPreviewModal();
+    }
+  });
+
+  if (btnStoryShare) {
+    btnStoryShare.addEventListener('click', async () => {
+      if (currentStoryFile && navigator.canShare && navigator.canShare({ files: [currentStoryFile] })) {
+        try {
+          await navigator.share({
+            files: [currentStoryFile],
+            title: storyModalTitle ? storyModalTitle.textContent : 'Thiệp 20/10 UAC',
+            text: 'Món quà 20/10 độc bản từ CLB Nghệ thuật UAC - UEd 🌸✨'
+          });
+          return;
+        } catch (err) {
+          if (err.name !== 'AbortError') {
+            console.warn('Share error:', err);
+          }
+        }
+      }
+
+      // Fallback nếu share không khả dụng: trigger download hoặc mở tab mới
+      if (currentStoryUrl) {
+        const a = document.createElement('a');
+        a.href = currentStoryUrl;
+        a.download = currentStoryFile ? currentStoryFile.name : 'UAC_2010_Thiep.png';
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          try { document.body.removeChild(a); } catch(e) {}
+        }, 300);
+      }
+    });
+  }
+
+  if (btnStoryOpenNewTab) {
+    btnStoryOpenNewTab.addEventListener('click', () => {
+      if (currentStoryUrl) {
+        window.open(currentStoryUrl, '_blank');
+      }
+    });
+  }
+
   if (btnExportStory) {
     btnExportStory.addEventListener('click', async () => {
       if (!currentMember) return;
@@ -1011,7 +1067,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       try {
         await generateStoryImage(currentMember);
-        setMascotDialogue("Thiệp Story đã sẵn sàng rồi nè chị ơi! Chúc chị khoe Story rực rỡ nhất Facebook/Insta nha! 📸✨");
+        setMascotDialogue("Thiệp Story đã sẵn sàng rồi nè chị ơi! Chị chạm giữ ảnh để lưu vào Thư viện ảnh (Photos) nha! 📸✨");
       } catch (err) {
         console.error("Export error:", err);
         alert("Có lỗi khi tạo ảnh story, vui lòng thử lại!");
@@ -1023,6 +1079,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function generateStoryImage(member) {
+    // Đảm bảo font chữ đã tải xong trước khi render canvas
+    if (document.fonts) {
+      try {
+        await document.fonts.ready;
+      } catch (e) {
+        console.warn("Fonts ready check skipped:", e);
+      }
+    }
+
     const canvas = document.createElement('canvas');
     canvas.width = 1080;
     canvas.height = 1920;
@@ -1097,7 +1162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Badge pill
     ctx.fillStyle = '#FCEBED';
-    roundRect(ctx, 340, 1100, 400, 60, 30);
+    roundRect(ctx, 320, 1100, 440, 60, 30);
     ctx.fill();
     ctx.fillStyle = '#C85A70';
     ctx.font = 'bold 30px "Plus Jakarta Sans", sans-serif';
@@ -1123,11 +1188,25 @@ document.addEventListener('DOMContentLoaded', () => {
     ctx.fill();
     ctx.stroke();
 
-    // Wish text multiline wrap
+    // Wish text multiline wrap với tự động căn chỉnh cỡ chữ thông minh
     ctx.textAlign = 'left';
     ctx.fillStyle = '#4A3E3D';
-    ctx.font = '500 30px "Plus Jakarta Sans", sans-serif';
-    wrapText(ctx, member.personalWish, 140, wishBoxY + 70, 800, 48);
+    
+    let fontSize = 30;
+    let lineHeight = 48;
+    ctx.font = `500 ${fontSize}px "Plus Jakarta Sans", sans-serif`;
+    let lines = getWrappedLines(ctx, member.personalWish, 800);
+    
+    if (lines.length > 7) {
+      fontSize = 26;
+      lineHeight = 42;
+      ctx.font = `500 ${fontSize}px "Plus Jakarta Sans", sans-serif`;
+      lines = getWrappedLines(ctx, member.personalWish, 800);
+    }
+
+    lines.forEach((lineText, idx) => {
+      ctx.fillText(lineText, 140, wishBoxY + 65 + (idx * lineHeight));
+    });
 
     // Footer signature inside card
     ctx.textAlign = 'right';
@@ -1144,14 +1223,79 @@ document.addEventListener('DOMContentLoaded', () => {
       console.warn("Could not draw mascot on canvas:", e);
     }
 
-    // Download Image
-    const dataUrl = canvas.toDataURL('image/png');
-    const a = document.createElement('a');
-    a.href = dataUrl;
-    a.download = `UAC_2010_${member.username}.png`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    // 7. Chuyển canvas sang Blob & File (Tương thích 100% với Mobile & iOS)
+    const blob = await new Promise((resolve) => {
+      canvas.toBlob((b) => resolve(b), 'image/png');
+    });
+
+    const fileName = `UAC_2010_${member.username}.png`;
+    const file = new File([blob], fileName, { type: 'image/png' });
+    const imageUrl = URL.createObjectURL(blob);
+
+    // Nhận diện iOS / Safari
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+    // Kích hoạt Web Share API nếu hỗ trợ (Trên iPhone sẽ hiện "Lưu hình ảnh" vào Photos)
+    let sharedViaApi = false;
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: `Thiệp 20/10 UAC — ${member.fullName}`,
+          text: `Thiệp kỷ niệm 20/10 độc bản từ UAC Art Club dành riêng cho ${member.fullName}! 🌸✨`
+        });
+        sharedViaApi = true;
+      } catch (shareErr) {
+        if (shareErr.name !== 'AbortError') {
+          console.warn("Web Share dismissed or failed:", shareErr);
+        }
+      }
+    }
+
+    // Nếu không phải iOS và chưa share qua API (ví dụ máy tính PC), tự động tải file
+    if (!isIOS && !sharedViaApi) {
+      try {
+        const a = document.createElement('a');
+        a.href = imageUrl;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          try { document.body.removeChild(a); } catch(e) {}
+        }, 200);
+      } catch (dlErr) {
+        console.warn("Direct download link trigger failed:", dlErr);
+      }
+    }
+
+    // LUÔN MỞ MODAL XEM & LƯU THIỆP (Cực kỳ thân thiện cho iPhone và In-App Browser)
+    openStoryPreviewModal({
+      imageUrl,
+      blob,
+      file,
+      member
+    });
+  }
+
+  function getWrappedLines(ctx, text, maxWidth) {
+    const words = text.split(' ');
+    const lines = [];
+    let currentLine = '';
+    for (let n = 0; n < words.length; n++) {
+      const testLine = currentLine ? (currentLine + ' ' + words[n]) : words[n];
+      const metrics = ctx.measureText(testLine);
+      if (metrics.width > maxWidth && n > 0) {
+        lines.push(currentLine);
+        currentLine = words[n];
+      } else {
+        currentLine = testLine;
+      }
+    }
+    if (currentLine) {
+      lines.push(currentLine);
+    }
+    return lines;
   }
 
   // Canvas Helpers

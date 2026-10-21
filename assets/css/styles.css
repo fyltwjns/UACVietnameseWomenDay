@@ -1839,3 +1839,171 @@ body {
     font-size: 0.72rem;
   }
 }
+
+
+/* ========================================================
+   SECTION 6: STORY CARD PREVIEW & DOWNLOAD MODAL (IPHONE / MOBILE)
+   ======================================================== */
+.story-modal-overlay {
+  z-index: 10000;
+}
+
+.story-preview-card {
+  position: relative;
+  max-width: 440px;
+  width: 92%;
+  max-height: 92vh;
+  background: #FFFDF9;
+  border-radius: 24px;
+  padding: 24px 18px 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(224, 122, 139, 0.2);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+  opacity: 0;
+}
+
+.story-modal-overlay.active .story-preview-card {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.story-modal-header {
+  margin-bottom: 10px;
+}
+
+.story-modal-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #C85A70;
+  background: #FCEBED;
+  padding: 4px 12px;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.story-modal-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #4A3E3D;
+  margin: 0;
+}
+
+.story-modal-hint-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: #FFF3F5;
+  border: 1.5px dashed #E07A8B;
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.story-modal-hint-box .hint-icon {
+  font-size: 1.35rem;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.story-modal-hint-box .hint-text {
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #6D4C52;
+}
+
+.story-modal-hint-box .hint-text strong {
+  color: #C85A70;
+  font-weight: 700;
+}
+
+.story-image-wrap {
+  width: 100%;
+  max-height: 52vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #1C1919;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  margin-bottom: 14px;
+}
+
+#storyPreviewImg {
+  width: 100%;
+  height: auto;
+  max-height: 52vh;
+  object-fit: contain;
+  display: block;
+  border-radius: 16px;
+  -webkit-touch-callout: default !important;
+  -webkit-user-select: auto !important;
+  user-select: auto !important;
+  pointer-events: auto !important;
+  cursor: pointer;
+}
+
+.story-modal-actions {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.btn-story-action {
+  flex: 1;
+  padding: 12px 14px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-story-share {
+  background: linear-gradient(135deg, #E07A8B, #C85A70);
+  color: #FFFFFF;
+  box-shadow: 0 6px 18px rgba(200, 90, 112, 0.35);
+}
+
+.btn-story-share:hover, .btn-story-share:active {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(200, 90, 112, 0.45);
+}
+
+.btn-story-open {
+  background: #FAF0F2;
+  color: #C85A70;
+  border: 1.5px solid rgba(224, 122, 139, 0.3);
+}
+
+.btn-story-open:hover, .btn-story-open:active {
+  background: #FCEBED;
+  transform: translateY(-2px);
+}
+
+/* Ẩn Bé ê a xu khi modal Story Preview active */
+#storyPreviewModal.active ~ .mascot-companion-widget,
+body:has(#storyPreviewModal.active) .mascot-companion-widget {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+  transform: translateY(24px) scale(0.85) !important;
+}

@@ -406,8 +406,43 @@
   </div>
 
 
+  <!-- ========================================================
+       SECTION 6: STORY CARD PREVIEW & DOWNLOAD MODAL (IPHONE & MOBILE OPTIMIZED)
+       ======================================================== -->
+  <div class="modal-overlay story-modal-overlay" id="storyPreviewModal" aria-hidden="true">
+    <div class="story-preview-card" role="dialog" aria-modal="true">
+      <button class="modal-close-btn" id="btnCloseStoryModal" aria-label="Đóng">&times;</button>
+      
+      <div class="story-modal-header">
+        <div class="story-modal-badge">🌸 THIỆP 20/10 ĐỘC BẢN</div>
+        <h3 class="story-modal-title" id="storyModalTitle">Thiệp Story Của Bạn</h3>
+      </div>
+
+      <div class="story-modal-hint-box" id="storyModalHintBox">
+        <span class="hint-icon">📱</span>
+        <div class="hint-text">
+          <strong>Mẹo lưu ảnh cho iPhone & Điện thoại:</strong><br>
+          Chạm và <strong>nhấn giữ vào ảnh 1 giây</strong> rồi chọn <strong>"Lưu vào Ảnh"</strong> (Save to Photos / Tải ảnh xuống) để lưu thiệp vào máy ngay nhé! ✨
+        </div>
+      </div>
+
+      <div class="story-image-wrap">
+        <img id="storyPreviewImg" src="" alt="Thiệp kỷ niệm 20/10 UAC Story">
+      </div>
+
+      <div class="story-modal-actions">
+        <button class="btn-story-action btn-story-share" id="btnStoryShare">
+          <span>📲</span> Lưu / Chia Sẻ Thiệp
+        </button>
+        <button class="btn-story-action btn-story-open" id="btnStoryOpenNewTab">
+          <span>↗️</span> Mở Tab Mới
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Data & Application Logic Scripts -->
-  <script src="assets/js/data.js?v=20118"></script>
-  <script src="assets/js/app.js?v=20123"></script>
+  <script src="assets/js/data.js?v=20261021_v2"></script>
+  <script src="assets/js/app.js?v=20261021_v2"></script>
 </body>
 </html>
