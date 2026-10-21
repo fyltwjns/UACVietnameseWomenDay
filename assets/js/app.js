@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
       "Bé ê a xu đang đợi các chị ở phía dưới nè, vuốt xuống thôi nào! 👇💖"
     ],
     greeting: [
-      "Tadaaa! Chị bấm vào nút 'Nhận Quà Nè Các Nàng' để mở hộp quà bí mật nhé! 🎁✨",
+      "Tadaaa! Chị bấm vào nút 'Bấm để nhận quà nè...' để mở hộp quà bí mật nhé! 🎁✨",
       "Món quà tri ân 20/10 đặc biệt nhất của UAC đang chờ chị mở ra nè! 💌",
       "Chị có chìa khóa bí mật chưa nè? Bấm nút để nhập nha! 🗝️"
     ],
@@ -493,7 +493,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (scrollY > window.innerHeight * 0.35) {
         if (currentStep !== 'greeting') {
           currentStep = 'greeting';
-          setMascotDialogue("Tadaaa! Chị bấm vào nút 'Nhận Quà Nè Các Nàng' để mở hộp quà bí mật nhé! 🎁✨");
+          setMascotDialogue("Tadaaa! Chị bấm vào nút 'Bấm để nhận quà nè...' để mở hộp quà bí mật nhé! 🎁✨");
           resetWishRotation();
         }
       } else {

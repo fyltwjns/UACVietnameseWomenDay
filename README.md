@@ -7,7 +7,7 @@ Trang web kỷ niệm ngày Phụ nữ Việt Nam 20/10 dành riêng cho 36 thà
 ## 📁 Cấu Trúc Thư Mục Chuẩn Vercel (Production Ready)
 
 ```text
-2010/
+UACVietnameseWomenDay/
 ├── index.html                   # Trang chủ trải nghiệm 20/10 (Hero video, Nút mở quà, Video ca nhạc, Thiệp cá nhân)
 ├── vercel.json                  # Cấu hình tối ưu Vercel (Clean URLs, Caching Headers 1 năm cho video/ảnh/font, Security)
 ├── .gitignore                   # Loại trừ file rác hệ điều hành (.DS_Store, Thumbs.db,...)
