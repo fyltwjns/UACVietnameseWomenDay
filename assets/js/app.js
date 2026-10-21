@@ -510,6 +510,7 @@ document.addEventListener('DOMContentLoaded', () => {
     btnOpenSurprise.addEventListener('click', () => {
       playCuteBeep();
       gatewayModal.classList.add('active');
+      document.body.classList.add('modal-open');
       currentStep = 'modal';
       pickMascotLine('modal');
       authUsername.focus();
@@ -519,10 +520,25 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnCloseModal) {
     btnCloseModal.addEventListener('click', () => {
       gatewayModal.classList.remove('active');
+      document.body.classList.remove('modal-open');
       const scrollY = window.scrollY || window.pageYOffset;
       currentStep = scrollY > window.innerHeight * 0.35 ? 'greeting' : 'hero';
       pickMascotLine(currentStep);
       resetWishRotation();
+    });
+  }
+
+  // Đóng gateway modal khi click ra nền ngoài
+  if (gatewayModal) {
+    gatewayModal.addEventListener('click', (e) => {
+      if (e.target === gatewayModal) {
+        gatewayModal.classList.remove('active');
+        document.body.classList.remove('modal-open');
+        const scrollY = window.scrollY || window.pageYOffset;
+        currentStep = scrollY > window.innerHeight * 0.35 ? 'greeting' : 'hero';
+        pickMascotLine(currentStep);
+        resetWishRotation();
+      }
     });
   }
 
@@ -606,6 +622,7 @@ document.addEventListener('DOMContentLoaded', () => {
       playCuteBeep();
       if (lookupModal) {
         lookupModal.classList.add('active');
+        document.body.classList.add('modal-open');
         renderLookupList(lookupSearchInput ? lookupSearchInput.value : '');
         setTimeout(() => {
           if (lookupSearchInput) lookupSearchInput.focus();
@@ -617,6 +634,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnCloseLookup) {
     btnCloseLookup.addEventListener('click', () => {
       if (lookupModal) lookupModal.classList.remove('active');
+      if (!gatewayModal || !gatewayModal.classList.contains('active')) {
+        document.body.classList.remove('modal-open');
+      }
     });
   }
 
@@ -625,6 +645,9 @@ document.addEventListener('DOMContentLoaded', () => {
     lookupModal.addEventListener('click', (e) => {
       if (e.target === lookupModal) {
         lookupModal.classList.remove('active');
+        if (!gatewayModal || !gatewayModal.classList.contains('active')) {
+          document.body.classList.remove('modal-open');
+        }
       }
     });
   }
@@ -661,14 +684,58 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function getActiveMembers() {
+    let list = window.UAC_MEMBERS || [];
     try {
       const stored = localStorage.getItem('UAC_CUSTOM_MEMBERS');
       if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        let parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          if (window.UAC_MEMBERS && window.UAC_MEMBERS.length > 0) {
+            let changed = false;
+            // 1. Đồng bộ ảnh và lời chúc mới nhất từ data.js
+            parsed.forEach(p => {
+              const fresh = window.UAC_MEMBERS.find(m => m.id === p.id || m.username === p.username);
+              if (fresh) {
+                if (fresh.photo && (!p.photo || p.photo.includes('unsplash.com'))) {
+                  p.photo = fresh.photo;
+                  changed = true;
+                }
+                if (fresh.personalWish && (!p.personalWish || p.personalWish.length < 15)) {
+                  p.personalWish = fresh.personalWish;
+                  p.quotes = fresh.quotes;
+                  changed = true;
+                }
+                if (fresh.id > 36) {
+                  p.personalWish = fresh.personalWish;
+                  p.quotes = fresh.quotes;
+                  p.badge = fresh.badge;
+                  p.photo = fresh.photo;
+                  p.department = fresh.department;
+                  p.fullName = fresh.fullName;
+                  p.password = fresh.password;
+                  changed = true;
+                }
+              }
+            });
+
+            // 2. Tự động merge các thành viên mới thêm vào parsed
+            window.UAC_MEMBERS.forEach(wm => {
+              const exists = parsed.some(pm => pm.id === wm.id || pm.username === wm.username);
+              if (!exists) {
+                parsed.push(wm);
+                changed = true;
+              }
+            });
+
+            if (changed) {
+              localStorage.setItem('UAC_CUSTOM_MEMBERS', JSON.stringify(parsed));
+            }
+          }
+          return parsed;
+        }
       }
     } catch(e) {}
-    return window.UAC_MEMBERS || [];
+    return list;
   }
 
   // Handle Form Submit & Authentication
@@ -696,6 +763,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       // Close modal
       gatewayModal.classList.remove('active');
+      document.body.classList.remove('modal-open');
       
       // Switch screen: hide video and greeting, show sanctuary
       if (heroVideoSection) heroVideoSection.style.display = 'none';

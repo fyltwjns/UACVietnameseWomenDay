@@ -1,6 +1,6 @@
 # 🌸 UAC Art Club - Kỷ Niệm 20/10 Độc Bản
 
-Trang web kỷ niệm ngày Phụ nữ Việt Nam 20/10 dành riêng cho 36 thành viên nữ UAC Art Club (UED's Art Club).
+Trang web kỷ niệm ngày Phụ nữ Việt Nam 20/10 dành riêng cho 39 thành viên nữ UAC Art Club (UED's Art Club).
 
 ---
 
@@ -14,7 +14,7 @@ UACVietnameseWomenDay/
 ├── README.md                    # Tài liệu dự án & Hướng dẫn triển khai
 │
 ├── dungduavoitao/               # Cổng Quản Trị Viên bí mật
-│   └── index.html               # Trang quản trị: Cấp phát pass, copy link gửi riêng, preview thiệp 36 thành viên
+│   └── index.html               # Trang quản trị: Cấp phát pass, copy link gửi riêng, preview thiệp 39 thành viên
 │
 ├── assets/
 │   ├── images/
@@ -25,8 +25,8 @@ UACVietnameseWomenDay/
 │   │
 │   ├── js/
 │   │   ├── app.js               # Logic tương tác, linh vật Bé ê a xu, âm thanh cute, kiểm tra nickname & pass
-│   │   ├── data.js              # Cơ sở dữ liệu 36 thành viên & lời chúc độc bản
-│   │   └── members.json         # Dữ liệu JSON backup 36 thành viên
+│   │   ├── data.js              # Cơ sở dữ liệu 39 thành viên & lời chúc độc bản
+│   │   └── members.json         # Dữ liệu JSON backup 39 thành viên
 │   │
 │   ├── fonts/
 │   │   └── PlusJakartaSans-Variable.ttf  # Full font 100% tiếng Việt có dấu (loại bỏ phụ thuộc Google CDN)
@@ -39,11 +39,11 @@ UACVietnameseWomenDay/
 │   │   ├── be_mam_key.png       # Giữ chìa khóa vàng
 │   │   └── be_mam_idle.png      # Đứng đáng yêu
 │   │
-│   ├── photos/                  # 36 ảnh chân dung thành viên chuẩn AI YuNet Face-Centering (tỉ lệ 4:5)
+│   ├── photos/                  # 39 ảnh chân dung thành viên chuẩn AI YuNet Face-Centering (tỉ lệ 4:5)
 │   │   ├── an.jpg
 │   │   ├── ha.jpg
 │   │   ├── le.jpg
-│   │   └── ... (36 thành viên đầy đủ)
+│   │   └── ... (39 thành viên đầy đủ)
 │   │
 │   └── video/                   # Video chính chất lượng cao
 │       ├── video_hero.mp4       # Video hero cinematic đầu trang (10 MB)
